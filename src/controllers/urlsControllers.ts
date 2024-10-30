@@ -43,12 +43,16 @@ export const redirectUrl = async (req: Request, res: Response): Promise<any> => 
         const { shortCode } = req.params;
         
         // Find the original URL by shortCode
-        const url = await Url.findOne({ shortCode });
+        const url = await Url.findOneAndUpdate(
+            {shortCode},
+            { $inc: { accessCount: 1 } },
+            {new: true}
+        );
+        
         if (!url) {
             return res.status(404).json({ message: "Short code not found" });
         }
 
-        // Redirect to the original URL
         return res.redirect(url.url);
     } catch (error) {
         console.error(error);
@@ -80,7 +84,7 @@ export const UpdateUrl = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
-//delete url
+
 export const deleteUrl = async (req: Request, res: Response): Promise<any> => {
     try {
         const { shortCode } = req.params
@@ -100,4 +104,21 @@ export const deleteUrl = async (req: Request, res: Response): Promise<any> => {
         return res.status(500).json({ message: "Server error" });
     }
 }
-                
+
+export const getAccessCounter = async (req: Request, res: Response):Promise<any>=>{
+    try {
+        const {shortCode} = req.params
+        console.log(req.params)
+
+        const url = await Url.findOne({shortCode})
+        if(!url){
+            return res.status(404).json({message: "Url not found" })
+        }
+
+        return res.status(200).json({message: `Access Count from: ${shortCode}`, statics: url.accessCount, url: url.url})
+        
+    } catch (error) {
+        return res.status(500).json({ message: "Server error" });
+    }
+
+}
