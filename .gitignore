@@ -1,6 +1,8 @@
 # Ignore node_modules directory
 node_modules/
-
+# Ignore YAML files
+*.yaml
+*.yml
 # Ignore log files
 *.log
 
