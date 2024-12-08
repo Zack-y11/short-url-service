@@ -38,3 +38,5 @@ node_modules/.pnpm/node_modules/.bin/mime
 node_modules/.pnpm/node_modules/.bin/mime
 node_modules/.pnpm/node_modules/.bin/mime.CMD
 node_modules/.pnpm/node_modules/.bin/mime.ps1
+# Ignore Fly.io configuration
+fly.toml

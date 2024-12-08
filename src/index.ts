@@ -6,7 +6,7 @@ import urlRoutes from './routes/urlsRoutes'
 
 dotenv.config()
 
-const port = process.env.PORT || 3000
+const port = parseInt(process.env.PORT || '8080')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -18,8 +18,7 @@ mongoose.connect(uri)
 .then(()=> console.log('Connected To DB'))
 .catch((e)=> console.log('Mongo db connection error: ', e))
 
-
-app.listen(port, ()=>{
-    console.log(`Server is running on port ${port}: http://localhost:3000`)
-})
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening on port ${port}`);
+});
 
