@@ -1,44 +1,28 @@
-// api/index.ts
-import express, { Express } from "express";
+import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import urlRoutes from "../src/routes/urlsRoutes";
+import urlRoutes from "./routes/urlsRoutes";
 
+const app = express();
 dotenv.config();
 
-// Create Express instance
-const app: Express = express();
-
-// Middleware
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
-const connectDB = async () => {
-  try {
-    const uri = process.env.MONGO_URI;
-    if (!uri) throw new Error('MONGO_URI is not defined');
-    
-    // Configure MongoDB connection (suitable for serverless)
-    await mongoose.connect(uri, {
-      maxPoolSize: 10,
-    });
-    console.log('MongoDB connected');
-  } catch (error) {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-  }
-};
-
-// Routes
-app.get("/api", (req, res) => {
-  res.send("Welcome to URL Shortener API");
+// Basic route to test if the API is working
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to URL Shortener API" });
 });
-app.use("/api", urlRoutes);  // Changed from "/api/shorten" to "/api"
 
-// Connect to MongoDB when the app starts
-connectDB();
+// Use URL routes without the /api prefix
+app.use("/", urlRoutes);
+
+const uri = process.env.MONGO_URI;
+mongoose
+  .connect(uri)
+  .then(() => console.log("Connected To DB"))
+  .catch((e) => console.log("Mongo db connection error: ", e));
 
 // Export the Express API
 export default app;
