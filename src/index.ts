@@ -35,7 +35,7 @@ const connectDB = async () => {
 app.get("/api", (req, res) => {
   res.send("Welcome to URL Shortener API");
 });
-app.use("/api/shorten", urlRoutes);
+app.use("/api", urlRoutes);  // Changed from "/api/shorten" to "/api"
 
 // Connect to MongoDB when the app starts
 connectDB();

@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import Url from '../models/url'
 import { randomBytes } from "crypto";
 
-const baseUrl = 'http://localhost:3000/shorten'
+const baseUrl = process.env.VERCEL_URL ? 
+  `https://${process.env.VERCEL_URL}/api/shorten` : 
+  'http://localhost:3000/api';
 
 export const getAllUrls = async (req: Request, res: Response) => {
     try {
