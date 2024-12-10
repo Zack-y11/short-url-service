@@ -1,30 +1,44 @@
-import express from "express";
+// api/index.ts
+import express, { Express } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import urlRoutes from "../src/routes/urlsRoutes";
 
-const app = express();
 dotenv.config();
 
+// Create Express instance
+const app: Express = express();
+
+// Middleware
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
+// Connect to MongoDB
+const connectDB = async () => {
+  try {
+    const uri = process.env.MONGO_URI;
+    if (!uri) throw new Error('MONGO_URI is not defined');
+    
+    // Configure MongoDB connection (suitable for serverless)
+    await mongoose.connect(uri, {
+      maxPoolSize: 10,
+    });
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  }
+};
+
+// Routes
+app.get("/api", (req, res) => {
   res.send("Welcome to URL Shortener API");
 });
-app.use("/shorten", urlRoutes);
+app.use("/api/shorten", urlRoutes);
 
-const uri = process.env.MONGO_URI;
-mongoose
-  .connect(uri)
-  .then(() => console.log("Connected To DB"))
-  .catch((e) => console.log("Mongo db connection error: ", e));
+// Connect to MongoDB when the app starts
+connectDB();
 
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-  });
-}
-
-module.exports = app;
+// Export the Express API
+export default app;
