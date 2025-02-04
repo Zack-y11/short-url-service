@@ -3,8 +3,8 @@ import Url from '../models/url'
 import { randomBytes } from "crypto";
 
 const baseUrl = process.env.VERCEL_URL ? 
-  `https://minurl-six.vercel.app` : 
-  'http://localhost:3000';
+  `https://minurl-six.vercel.app/api` : 
+  'http://localhost:3000/api';
 
 export const getAllUrls = async (req: Request, res: Response) => {
     try {
