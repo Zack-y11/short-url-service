@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 });
 
 // Use URL routes without the /api prefix
-app.use("/api", urlRoutes);
+app.use("/", urlRoutes);
 
 const uri = process.env.MONGO_URI;
 mongoose
